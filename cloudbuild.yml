@@ -1,18 +1,20 @@
 steps:
   - name: 'gcr.io/cloud-builders/docker'
+    entrypoint: 'bash'
     args:
-      [
-        'build',
-        '-t',
-        'us-east1-docker.pkg.dev/annular-heading-423723-a4/tienda/order-ms',
-        '-f',
-        'dockerfile.prod',
-        '--platform=linux/amd64',
-        '.',
-      ]
+      - -c
+      - |
+        docker build -t us-east1-docker.pkg.dev/annular-heading-423723-a4/tienda/payment-ms -f dockerfile.prod --platform=linux/amd64 --build-arg ORDER_DATABASE_URL=$$DATABASE_URL .
+    secretEnv: ['DATABASE_URL']
+
   - name: 'gcr.io/cloud-builders/docker'
     args:
       [
         'push',
-        'us-east1-docker.pkg.dev/annular-heading-423723-a4/tienda/order-ms',
+        'us-east1-docker.pkg.dev/annular-heading-423723-a4/tienda/payment-ms',
       ]
+
+availableSecrets:
+  secretManager:
+    - versionName: projects/167166550007/secrets/ORDER_DATABASE_URL/versions/1
+      env: 'DATABASE_URL'

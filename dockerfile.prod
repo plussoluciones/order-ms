@@ -16,6 +16,8 @@ FROM node:21-alpine3.19 as build
 ARG ORDER_DATABASE_URL
 ENV DATABASE_URL=$ORDER_DATABASE_URL
 
+RUN echo "database_URL ::: $ORDER_DATABASE_URL"
+
 WORKDIR /usr/src/app
 
 #Copiar de deps los modulos de node
